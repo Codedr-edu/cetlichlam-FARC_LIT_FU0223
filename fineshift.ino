@@ -63,7 +63,7 @@ void loop() {
   int deadzone = 10;
 
   // Đọc joystick trái (PSS_LX: ngang, PSS_LY: dọc)
-  int rawX = ps2x.Analog(PSS_LX);
+  int rawX = ps2x.Analog(PSS_RX);
   int rawY = ps2x.Analog(PSS_LY);
 
   int x = rawX - 128;
@@ -110,7 +110,7 @@ void loop() {
 
   // Debug giá trị
   Serial.print("LY: "); Serial.print(y);
-  Serial.print(" | LX: "); Serial.print(x);
+  Serial.print(" | RX: "); Serial.print(x);
   Serial.print(" | L_PWM: "); Serial.print(pwmLeft);
   Serial.print(" | R_PWM: "); Serial.println(pwmRight);
 
