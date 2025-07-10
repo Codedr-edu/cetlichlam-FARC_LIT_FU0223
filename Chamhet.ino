@@ -29,7 +29,8 @@ PS2X ps2x;
 // Servo cánh chắn vật
 #define SERVO_GATE 2  // kênh PWM số 2
 #define SERVO_GATE1 3  
-#define SERVO_GATE2 6  
+#define SERVO_GATE2 6
+#define SERVO_GATE3 7  
 
 // Trạng thái cửa
 bool isGateOpen = false;
@@ -66,14 +67,12 @@ void setup() {
   pwm.setPWMFreq(50);
   Wire.setClock(400000);
 
-  // Đặt vị trí servo cửa mặc định là đóng (góc 0°)
-  pwm.writeMicroseconds(SERVO_GATE, 1000);
-  pwm.writeMicroseconds(SERVO_GATE1, 2000);
-  pwm.writeMicroseconds(SERVO_GATE2, 2000);
+  pwm.writeMicroseconds(SERVO_GATE3, 2000);
+  pwm.writeMicroseconds(SERVO_GATE4, 1000);
 
   isGateOpen = false;
   isGateOpen1 = false;
-  isGateOpen2 = false;
+  //isGateOpen2 = false;
 
   // Dừng tất cả động cơ
   stopAll();
@@ -158,32 +157,55 @@ void loop() {
   }
 
   // === Servo cánh chắn vật ===
-  //f (ps2x.ButtonPressed(PSB_GREEN) && !isGateOpen1) {
-    //wm.writeMicroseconds(SERVO_GATE1, 2000);  // Mở cửa
-    //isGateOpen1 = true;
-  //} else if (ps2x.ButtonPressed(PSB_CROSS) && isGateOpen1) {
-    //pwm.writeMicroseconds(SERVO_GATE1, 1000);  // Đóng cửa
-    //isGateOpen1 = false;
-  //}
+  """
+  if (ps2x.ButtonPressed(PSB_GREEN) && !isGateOpen1) {
+    pwm.writeMicroseconds(SERVO_GATE1, 2000);  // Mở cửa
+    isGateOpen1 = true;
+  } else if (ps2x.ButtonPressed(PSB_CROSS) && isGateOpen1) {
+    pwm.writeMicroseconds(SERVO_GATE1, 1000);  // Đóng cửa
+    isGateOpen1 = false;
+  }
 
-  //if (ps2x.ButtonPressed(PSB_PINK) && !isGateOpen2) {
-   // pwm.writeMicroseconds(SERVO_GATE2, 2000);  // Mở cửa
-    //isGateOpen2 = true;
-  //} else if (ps2x.ButtonPressed(PSB_RED) && isGateOpen2) {
-    //pwm.writeMicroseconds(SERVO_GATE2, 1000);  // Đóng cửa
-    //isGateOpen2 = false;
-  //}
+  if (ps2x.ButtonPressed(PSB_PINK) && !isGateOpen2) {
+    pwm.writeMicroseconds(SERVO_GATE2, 2000);  // Mở cửa
+    isGateOpen2 = true;
+  } else if (ps2x.ButtonPressed(PSB_RED) && isGateOpen2) {
+    pwm.writeMicroseconds(SERVO_GATE2, 1000);  // Đóng cửa
+    isGateOpen2 = false;
+  }
+  """
 
-  if (ps2x.ButtonPressed(PSB_L1) && !isGateOpen) {
-    pwm.writeMicroseconds(SERVO_GATE, 1000); 
-    pwm.writeMicroseconds(SERVO_GATE1, 2000); // Mở cửa
-    pwm.writeMicroseconds(SERVO_GATE2, 2000); 
-    isGateOpen = true;
-  } else if (ps2x.ButtonPressed(PSB_L2) && isGateOpen) {
-    pwm.writeMicroseconds(SERVO_GATE, 2000);
-    pwm.writeMicroseconds(SERVO_GATE1, 1000); 
-    pwm.writeMicroseconds(SERVO_GATE2, 1000); // Đóng cửa
-    isGateOpen = false;
+  if (ps2x.ButtonPressed(PSB_L2)) {
+    if (!isGateOpen2){
+      pwm.writeMicroseconds(SERVO_GATE, 1000);
+      pwm.writeMicroseconds(SERVO_GATE2, 2000);
+      delay(500);
+      pwm.writeMicroseconds(SERVO_GATE, 1500);
+      pwm.writeMicroseconds(SERVO_GATE2, 1500);
+      isGateOpen = true;
+    } else {
+      pwm.writeMicroseconds(SERVO_GATE, 2000);
+      pwm.writeMicroseconds(SERVO_GATE2, 1000);
+      delay(500);
+      pwm.writeMicroseconds(SERVO_GATE, 1500);
+      pwm.writeMicroseconds(SERVO_GATE2, 1500);
+      isGateOpen = false;
+    }  // Mở cửa
+  } else {
+    pwm.writeMicroseconds(SERVO_GATE, 1500);
+    pwm.writeMicroseconds(SERVO_GATE2, 1500);
+  }
+  
+  if (ps2x.ButtonPressed(PSB_L1)) {
+    if (!isGateOpen1){
+      pwm.writeMicroseconds(SERVO_GATE, 1000); 
+      pwm.writeMicroseconds(SERVO_GATE1, 2000); 
+      isGateOpen1 = true;
+    } else {
+      pwm.writeMicroseconds(SERVO_GATE, 2000); 
+      pwm.writeMicroseconds(SERVO_GATE1, 1000); 
+      isGateOpen1 = false;
+    }
   }
 
   // Debug
