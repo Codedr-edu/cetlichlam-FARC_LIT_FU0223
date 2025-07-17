@@ -176,7 +176,7 @@ void loop() {
     }  // Mở cửa
   } else {
     pwm.writeMicroseconds(SERVO_GATE, 1500);
-    pwm.writeMicroseconds(SERVO_GATE2, 1500);
+    pwm.writeMicroseconds(SERVO_GATE1, 1500);
   }
   
   if (ps2x.ButtonPressed(PSB_L2)) {
